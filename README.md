@@ -150,7 +150,7 @@ The main concert control app runs on a computer. It receives audience input, man
 ## License
 
 This project is licensed under the GNU General Public License v3.0.  
-See the [LICENSE](LICENSE.txt) file for details.
+See the [LICENSE](https://github.com/jottavi/choix/blob/main/LICENSE) file for details.
 
 ---
 
