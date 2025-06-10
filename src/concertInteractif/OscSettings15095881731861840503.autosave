@@ -1,0 +1,32 @@
+
+// Logic to manage the interaction
+
+class LogicManager {
+  
+  OscP5 oscp5;
+  NetAddress remotelocation;
+  int bez, nois, points, txt, trace; // int that keeps count of the votes
+  float time; //time value to restart the votes
+  
+  LogicManager(){
+      
+  } 
+  
+  // OSC Method that listens to incoming messages
+  void oscEvent (OscMessage msg){
+    
+    if (msg.checkAddrPattern("/playerlist")) { // Check if the message is for "/playerlist"
+    }
+    
+    if (msg.checkAddrPattern("/playerList")) {
+    // Get the NetAddress of the sender
+      NetAddress sender = msg.netAddress();
+    
+    // Retrieve the IP address of the sender
+      String senderIP = sender.address();
+    
+    // Print the IP address
+      println("Received OSC message from IP: " + senderIP);
+    }
+  }
+}

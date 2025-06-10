@@ -1,0 +1,43 @@
+{
+  "Textural": [
+    "Choisis un son et déforme-le lentement.",
+    "Assourdis ton instrument et joue comme s'il parlait.",
+    "Inscris une spirale sonore sur ton instrument.",
+    "Cherche la vibration cachée.",
+    "Trouve un frottement qui respire.",
+    "Ton instrument est un paysage.",
+    "Joue un souvenir sonore."
+  ],
+  "Rhythmic": [
+    "Frappe avec hésitation volontaire.",
+    "Imite le rythme d'une machine dont tu te souviens.",
+    "Fais rebondir un objet trois fois avant de produire un son.",
+    "Ne frappe que là où tu ne regardes pas.",
+    "Accélère sans urgence.",
+    "Utilise une partie de ton instrument qui n'est pas faite pour etre frappée.",
+    "Répète un geste jusqu'à ce que quelqu'un le remarque."
+  ],
+  "Abstract": [
+    "Joue quelque chose que tu ressens mais que tu ne peux pas expliquer.",
+    "Joue comme si tu étais en apesanteur.",
+    "Reproduis un son intérieur.",
+    "Inspire puis expire un son.",
+    "Ton rythme vient de la lumière.",
+    "Fais écho au silence entre les autres joueurs.",
+    "Résonne comme une corde."
+  ],
+  "Silence": [
+    "Ne commence qu'après trois souffles mentaux.",
+    "Attends un silence collectif.",
+    "Joue uniquement lorsqu'un autre son s'arrète.",
+    "Garde le silence comme s'il était lourd, Lache-le quand il glisse.",
+    "Rejoue un silence du passé.",
+    "Joue sans écouter. Puis écoute sans jouer.",
+    "Commence en silence, termine en écho."
+  ],
+  "Noise": [
+    "Rends le silence bruyant.",
+    "Joue dans l'ombre de l'autre.",
+    "Plie le son."
+  ]
+}

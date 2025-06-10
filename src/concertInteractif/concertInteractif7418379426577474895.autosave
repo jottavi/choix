@@ -1,0 +1,26 @@
+
+// Program for an interactive percussion concert
+
+Instructions texts;
+String[] list = loadStrings("instructions.txt");
+
+void setup()
+{
+  size(600,600,P3D);
+  background(255);
+  
+  texts = new Instructions(list);
+  
+}
+
+
+void draw()
+{
+}
+
+void keyPressed()
+{
+  if (key == 'b'){
+    texts.spawnInstruction(); 
+  }
+}

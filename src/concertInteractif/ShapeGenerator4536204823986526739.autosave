@@ -1,0 +1,161 @@
+
+
+//Basic Shape class that contains the basic parameters needed for this shapes,
+//like 3D position, movement, colors, and creation and destruction
+class ShapeGen {
+  
+  float x,y,z;
+  boolean isVisible = false;
+  float movSpeed = 2; // for transposing the images
+  float zPos, zMaxRange; //variables to destroy automatically the shapes
+
+  
+  ShapeGen(float x, float y, float z){
+    
+    this.x = x;
+    this.y = y;  
+    this.z = z;
+    this.zPos = z;
+  }
+
+  void display() {
+    
+    if (isVisible){
+      
+      fill(0);
+      pushMatrix();
+      translate(0, 0, zPos);
+      rect(x,y,50,50);  
+      popMatrix();
+      zPos -= movSpeed;
+    }      
+  }
+  
+  void spawn(){
+    
+    if (!isVisible){
+      isVisible = true;
+    }  
+  }
+  
+  void destroy(){
+    isVisible = false;
+    zPos = z;   
+  }
+}
+
+//This inherited classes will create the types of shapes, I used inheritance because
+//it can help future coders to optimize code
+
+// This shape produces a pointillism figure
+class ShapePoints extends ShapeGen {
+  
+  ShapePoints(float x, float y, float z){
+    super(x,y,z);
+  }
+  
+  void display() {
+    
+    if (isVisible){
+    
+      fill(0);
+      pushMatrix();
+      translate(0, 0, zPos);
+      rect(x,y,50,50);  
+      popMatrix();
+    
+      zPos -= movSpeed;
+      
+      }  
+  }
+}
+
+// This produces some kind of Picasso shapes or animated lines
+class ShapeBezier extends ShapeGen {
+  
+  ShapeBezier(float x, float y, float z){
+    super(x,y,z);
+  }
+  void display() {
+    if (isVisible){
+      
+      fill(0);
+      pushMatrix();
+      translate(0, 0, zPos);
+      rect(x,y,50,50);  
+      popMatrix();    
+      zPos -= movSpeed;
+    }
+  }
+}
+
+// This produces some kind of traces like from a brush in painting
+class ShapeTraces extends ShapeGen {
+
+  ShapeTraces(float x, float y, float z){
+    super(x,y,z);
+  }
+  void display() {
+    if (isVisible){
+      
+      fill(0);
+      pushMatrix();
+      translate(0, 0, zPos);
+      rect(x,y,50,50);  
+      popMatrix();    
+      zPos -= movSpeed;
+    }    
+  }
+}
+
+// This produces the a 2D visualisation of a noise waveform
+class ShapeNoise extends ShapeGen {
+  
+  ShapeNoise(float x, float y, float z){
+    super(x,y,z);
+  }
+  void display() {
+    if (isVisible){
+      
+      fill(0);
+      pushMatrix();
+      translate(0, 0, zPos);
+      rect(x,y,50,50);  
+      popMatrix();    
+      zPos -= movSpeed;
+    }    
+  }
+}
+
+//This will manage the creation and destruction of shapes
+class ShapeManager{
+  
+  ArrayList<ShapeGen> shapes;
+
+  ShapeManager(){
+    shapes = new ArrayList<ShapeGen>(); 
+  }
+    
+  void loadShapes(ShapeGen shape){
+    shapes.add(shape);
+  }
+
+  void displayShapes( ShapeGen shape) {   
+    shape.display();
+   }
+    
+  void destroyShape(ShapeGen shape){
+    shape.destroy();
+    }
+   
+  void spawnShape(ShapeGen shape){
+    shape.spawn();
+  }
+
+  void clearAllShapes() {
+    for ( ShapeGen shape : shapes){
+      shape.destroy();
+    }
+    shapes.clear();
+  }
+}

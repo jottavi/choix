@@ -1,0 +1,105 @@
+
+// Apo33
+// Snati1206
+
+import oscP5.*;
+import netP5.*;
+
+OscP5 oscp5;
+NetAddress mainAddress;
+
+//timer related stuff
+Timer timer;
+float timeWindow = 30;
+float timeCurrent;
+
+// Player choice buttons here
+PlayerButtonManager playerButtons;
+int n = 5;
+
+// Music choice buttons here
+MusicButtonManager musicButtons;
+String[] musicCategory = {"Texture", "Rhythmic", "Abstract", "Silence", "Skip"};
+String[] musicChoice = {"/texture", "/rhythmic", "/abstract", "/silence", "/skip" };
+
+// Start button
+Button connectButton;
+
+void setup(){
+  
+  orientation(LANDSCAPE);  
+  background(255);
+  fullScreen();  
+  // Auto adjust font size
+  PFont font = createFont("SansSerif", 40 * displayDensity);
+  textFont(font);
+  
+  // Osc stuff here
+  oscp5 = new OscP5(this, 7500);
+  mainAddress = new NetAddress("192.168.8.242", 8000);
+  //mainAddress = new NetAddress("127.0.0.1", 8000);
+  // Timer stuff here
+  timer = new Timer(timeWindow);
+  
+  //Buttons here
+  playerButtons = new PlayerButtonManager();
+  playerButtons.spawn(n);
+
+  musicButtons = new MusicButtonManager();
+  musicButtons.spawn(musicCategory, musicChoice);
+  
+  connectButton = new Button("connect", "/addIP", 20, 20, 100, 80);
+  
+  //Send Start osc to receive number of players and add the IP to the array
+  //sendStart(oscp5, mainAddress);  
+}
+
+void draw(){
+  
+  background(255);
+   
+  //Spawn Timer 
+  timer.setTimeLeft(timeCurrent);
+  timer.update();
+  timer.display(width/2,height-20);
+  
+  //Text Stuff
+  textSize(60);
+  text("Apo33", width/2, height/10);
+  
+  //Player Buttons
+  playerButtons.display();  
+  musicButtons.display();
+  connectButton.display();
+  
+  // Reset music voting
+  if (timer.restart == true){
+    musicButtons.resetVote();
+  }
+}
+
+void OscEvent(OscMessage msg){
+  println("OSC received: " + msg.addrPattern() + " " + msg.get(0).floatValue());
+  // udpates time left in the round
+  timeLeft(msg);  
+  // updates number of players to spawn them
+  nplayers(msg); 
+  
+  print("### received an osc message.");
+  print(" addrpattern: "+msg.addrPattern());
+  println(" typetag: "+msg.typetag());
+}
+
+void touchStarted(){
+  if(connectButton.isActive){
+    musicButtons.handleTouch(touches[0].x, touches[0].y);
+    playerButtons.handleTouch(touches[0].x, touches[0].y);  
+  }
+  connectButton.handleTouch(touches[0].x, touches[0].y);
+}
+
+void exit(){  
+  removeIp(oscp5, mainAddress);
+  oscp5.stop();
+  super.exit();  
+}

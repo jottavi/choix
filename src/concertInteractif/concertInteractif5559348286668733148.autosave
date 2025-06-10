@@ -1,0 +1,142 @@
+/* Program for an interactive percussion concert
+    APO33
+    Author: Snati1206
+*/
+
+// Importing the OSC libraries to communicate with the users android app
+import netP5.*;
+import oscP5.*;
+ 
+int backgroundColor = 255;
+
+// Declaring the object that spawns the shapes
+ShapeManager shapeManager;
+ShapePoints figPoints;
+ShapeBezier figBez;
+ShapeNoise figNoise;
+ShapeTraces figTrace;
+
+
+// Declaring the object that spawns text
+JSONObject instructionsList; 
+Instructions instructions;
+
+// Declaring the Timer that shows at the bottom
+Timer timer;
+
+// Declaring the number of musicians
+PlayerManager playerManager;
+boolean isInputIn = false;
+String userInput = "";
+int numPlay; // number of musicians
+
+// Declaring the object destruction max range in z
+float MaxRange = -2000;
+
+// Declaring the votingManager
+
+LogicManager logicManager;
+
+// Section for the OSC connections and sending of Data
+OscP5 oscp5;
+NetAddress remoteLocation;
+
+void setup()
+{
+  fullScreen(P3D);
+  background(backgroundColor);
+  
+  // The shapes go here
+  figPoints = new ShapePoints(width/2,50+height/2,100);
+  figBez = new ShapeBezier(width/2,50+height/2,100);
+  figNoise = new ShapeNoise(width/2,50+height/2,100);
+  figTrace = new ShapeTraces(width/2,50+height/2,100);
+  
+  shapeManager = new ShapeManager();
+  shapeManager.loadShapes(figPoints);
+  shapeManager.loadShapes(figBez);
+  shapeManager.loadShapes(figNoise);
+  shapeManager.loadShapes(figTrace);
+  
+  // Trying to set up the autodestructor but not working yet
+  figPoints.zMaxRange = MaxRange;
+  figBez.zMaxRange = MaxRange;
+  figNoise.zMaxRange = MaxRange;
+  figTrace.zMaxRange = MaxRange;
+  
+  // The text spawner goes here
+  instructionsList = loadJSONObject("instructions.json");
+  instructions = new Instructions(instructionsList, width/2, height/2, 0);
+  
+  // The timer goes here
+  timer = new Timer(5);  
+  
+  // The playerManager goes here
+  playerManager = new PlayerManager();
+  
+  // The Osc stuff goes here  
+  oscp5 = new OscP5(this,8000);
+  remoteLocation = new NetAddress("127.0.0.1", 8001);
+  
+  // The voting logic goes here
+  logicManager = new LogicManager(timer);
+  
+}
+
+void draw()
+{
+  background(backgroundColor);
+  
+  //Ask for number of musicians
+  playerManager.start();
+  
+  //Draw Shapes
+  shapeManager.displayShapes(); //need to change this to display only the one that matches the winning shape of each round
+  
+  //Draw Text
+  instructions.display();
+  
+  //Draw Timer
+  timer.update();
+  timer.display(width/2,height-20);
+  
+  //Voting Logic
+  logicManager.update();
+    
+}
+
+void keyPressed()
+{
+  if (key == 'b'){
+    timer.restart = true;
+  }
+  if (key == 'c'){
+    shapeManager.destroyShape(figNoise);
+    instructions.destroy();
+    timer.restart = false;
+  }
+  
+  // stores the number of musicians when enterered an int and then ENTER RETURN
+  if (!isInputIn) {
+    if (key == ENTER || key == RETURN) {
+      // Process the input when Enter is pressed
+      int n = int(userInput);
+      isInputIn = true; // Mark input as complete
+      playerManager.spawnPlayers(n);
+      
+    } else if (key != CODED) {
+      // Append the typed character to the input
+      userInput += key;
+      playerManager.n = int(userInput);
+    } 
+  }
+}
+
+void oscEvent(OscMessage msg) {
+  println("Received OSC message: " + msg.addrPattern());
+  
+  // Forward the message to LogicManager
+  logicManager.voteCounting(msg);
+}
+
+  
